@@ -37,7 +37,7 @@ ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
             <Provider store={store}>
-                <BrowserRouter>
+                <BrowserRouter basename={'/front/ecogas'}>
                     <App/>
                 </BrowserRouter>
             </Provider>
