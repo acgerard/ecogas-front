@@ -25,13 +25,9 @@ export function Header() {
 
     useEffect(() => {
         dispatch(fetchStations())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
-        updateValue()
-    }, [location])
-
-    const updateValue = () => {
         switch (location.pathname) {
             case HOME_PATHNAME:
                 setValue(1)
@@ -54,8 +50,7 @@ export function Header() {
                 setBackoffice(true)
                 break;
         }
-    }
-
+    }, [location])
 
     const handleNavigate = (event: React.SyntheticEvent, newValue: number) => {
         switch (newValue) {
@@ -90,7 +85,7 @@ export function Header() {
         <AppBar position="static" color={'secondary'}>
             <Toolbar sx={{display: 'grid', gridAutoFlow: 'column', gridTemplateColumns: 'auto 1fr auto auto'}}>
                 <Box sx={{width: '70px', padding: '10px'}}>
-                    <img src={`${process.env.PUBLIC_URL}/ecogas-logo.svg`}/>
+                    <img src={`${process.env.PUBLIC_URL}/ecogas-logo.svg`} alt={''}/>
                 </Box>
                 <Typography variant="h4" sx={{
                     display: 'grid',

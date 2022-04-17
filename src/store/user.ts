@@ -1,7 +1,7 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../app/store";
 import {REDUX_STATUS} from "../helpers/constants";
-import {getUsers, UserWithStations, createUser as createUserApi, UserProfile} from "../api/users";
+import {getUsers, UserWithStations, createUser as createUserApi} from "../api/users";
 
 
 export const fetchUsers = createAsyncThunk(

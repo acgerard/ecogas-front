@@ -9,7 +9,6 @@ import {Home} from "../Home/Home";
 import {Diesel} from "../Diesel/Diesel";
 import {Ecogas} from "../Ecogas/Ecogas";
 import {Layout} from "./Layout";
-import {fetchStations} from "../../store/station";
 import {StationList} from "../Station/StationList";
 import {UserList} from "../User/UserList";
 

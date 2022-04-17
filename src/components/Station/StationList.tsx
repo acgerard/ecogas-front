@@ -12,7 +12,6 @@ import {useAppDispatch} from "../../app/hooks";
 import {ConfirmDialog} from "../common/ConfirmDialog/ConfirmDialog";
 import {Box, Fab, TextField} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import {UserProfile} from "../../api/users";
 
 export function StationList() {
     const [openDialog, setOpenDialog] = useState(false)

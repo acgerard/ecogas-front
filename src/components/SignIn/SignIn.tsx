@@ -26,7 +26,7 @@ export function SignIn() {
                 justifyContent: 'center',
                 marginBottom: '16px'
             }}>
-                <img src={`${process.env.PUBLIC_URL}/ecogas-logo.svg`}/>
+                <img src={`${process.env.PUBLIC_URL}/ecogas-logo.svg`} alt={''}/>
             </Box>
             <TextField
                 variant="outlined"

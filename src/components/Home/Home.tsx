@@ -32,7 +32,7 @@ export function Home() {
         if (!!selectedStationId) {
             dispatch(fetchTodayMeasures(selectedStationId))
         }
-    }, [selectedStationId])
+    }, [dispatch, selectedStationId])
 
     useEffect(() => {
         if (todayStatus === REDUX_STATUS.ERROR) {
