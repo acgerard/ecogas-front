@@ -8,7 +8,7 @@ export const fetchTodayMeasures = createAsyncThunk(
     'measures/today',
     async (stationId: number) => {
         const beginingDay = DateTime.now().minus({days: 1}).startOf('day')
-        const response = await getMeasures(stationId, beginingDay.toMillis(), MeasureGranularity.DAY)
+        const response = await getMeasures(stationId, beginingDay.toSeconds(), MeasureGranularity.DAY)
         return response.data
     }
 );
@@ -16,7 +16,7 @@ export const fetchDailyMeasures = createAsyncThunk(
     'measures/daily',
     async (stationId: number) => {
         const beginingMonth = DateTime.now().startOf('month')
-        const response = await getMeasures(stationId, beginingMonth.toMillis(), MeasureGranularity.DAY)
+        const response = await getMeasures(stationId, beginingMonth.toSeconds(), MeasureGranularity.DAY)
         return response.data
     }
 );
@@ -24,7 +24,7 @@ export const fetchMonthlyMeasures = createAsyncThunk(
     'measures/monthly',
     async (stationId: number) => {
         const beginningMonth = DateTime.now().startOf('month')
-        const response = await getMeasures(stationId, beginningMonth.toMillis(), MeasureGranularity.MONTH)
+        const response = await getMeasures(stationId, beginningMonth.toSeconds(), MeasureGranularity.MONTH)
         return response.data
     }
 );
@@ -32,7 +32,7 @@ export const fetchYearlyMeasures = createAsyncThunk(
     'measures/yearly',
     async (stationId: number) => {
         const oldDate = DateTime.now().minus({year: 2})
-        const response = await getMeasures(stationId, oldDate.toMillis(), MeasureGranularity.YEAR)
+        const response = await getMeasures(stationId, oldDate.toSeconds(), MeasureGranularity.YEAR)
         return response.data
     }
 );
@@ -165,11 +165,13 @@ export function getTodayStatus(state: RootState) {
 }
 
 export const getTodayDiesel = createSelector([getTodayMeasures], measures => {
-    if (measures.length !== 2) return null
+    if (measures.length === 0) return null
+    if (measures.length === 1) return measures[0].v_diesel
     return measures[0].v_diesel - measures[1].v_diesel
 })
 export const getTodayEcogas = createSelector([getTodayMeasures], measures => {
-    if (measures.length !== 2) return null
+    if (measures.length === 0) return null
+    if (measures.length === 1) return measures[0].v_ecogas
     return measures[0].v_ecogas - measures[1].v_ecogas
 })
 export const getThisYearDiesel = createSelector([getYearlyMeasures], measures => {

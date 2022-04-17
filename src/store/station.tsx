@@ -1,7 +1,7 @@
 import {createAsyncThunk, createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../app/store";
 import {REDUX_STATUS} from "../helpers/constants";
-import {getUserStations, Station, createStation as createStationApi} from "../api/stations";
+import {createStation as createStationApi, getUserStations, Station} from "../api/stations";
 
 
 export const fetchStations = createAsyncThunk(
@@ -29,7 +29,11 @@ const stationsInitialState = stationsAdapter.getInitialState({
 export const stationsSlice = createSlice({
     name: 'stations',
     initialState: stationsInitialState,
-    reducers: {},
+    reducers: {
+        selectStation(state, action) {
+            state.selected = action.payload
+        }
+    },
     extraReducers: builder => {
         builder.addCase(fetchStations.pending, (state, action) => {
             state.status = REDUX_STATUS.FETCHING
@@ -50,12 +54,15 @@ export const stationsSlice = createSlice({
     }
 })
 
+
+export const {selectStation} = stationsSlice.actions
 export default stationsSlice.reducer
 
 export const {
     selectAll: getStations,
     selectById: getStationById,
     selectEntities: getStationsById,
+    selectTotal: getNbStations,
 } = stationsAdapter.getSelectors((state: RootState) => state.stations)
 
 export const getSelectedStationId = (state: RootState) => state.stations.selected

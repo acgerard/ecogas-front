@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {AppBar, Box, IconButton, Tab, Tabs, Toolbar, Typography} from "@mui/material";
+import {AppBar, Box, IconButton, MenuItem, Tab, Tabs, Toolbar, Typography} from "@mui/material";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {useLocation, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {fetchStations, getSelectedStation} from "../../store/station";
+import {fetchStations, getSelectedStation, getStations, selectStation} from "../../store/station";
 import {getUserName, isAdmin, logout} from "../../store/authentication";
 import {useAppDispatch} from "../../app/hooks";
+import Select from "@mui/material/Select";
 
 const HOME_PATHNAME = '/home'
 const DIESEL_PATHNAME = '/diesel'
@@ -22,6 +23,7 @@ export function Header() {
     const station = useSelector(getSelectedStation)
     const username = useSelector(getUserName)
     const admin = useSelector(isAdmin)
+    const stations = useSelector(getStations)
 
     useEffect(() => {
         dispatch(fetchStations())
@@ -79,19 +81,37 @@ export function Header() {
         navigate('/login')
     }
 
-    // TODO if multiple stations, put a drop down somewhere to select it
+    const handleSelectStation = (stationId: number) => {
+        dispatch(selectStation(stationId))
+    }
 
     return <>
         <AppBar position="static" color={'secondary'}>
-            <Toolbar sx={{display: 'grid', gridAutoFlow: 'column', gridTemplateColumns: 'auto 1fr auto auto'}}>
+            <Toolbar sx={{
+                display: 'grid',
+                gridAutoFlow: 'column',
+                gridTemplateColumns: 'auto 1fr auto auto',
+                justifyItems: 'start'
+            }}>
                 <Box sx={{width: '70px', padding: '10px'}}>
                     <img src={`${process.env.PUBLIC_URL}/ecogas-logo.svg`} alt={''}/>
                 </Box>
-                <Typography variant="h4" sx={{
-                    display: 'grid',
-                    height: '100%',
-                    alignItems: 'center'
-                }}>{backoffice ? 'Administration' : station ? station.name || station.id : ''}</Typography>
+                {(backoffice || stations.length === 1) ? <Typography variant="h4" sx={{
+                        display: 'grid',
+                        height: '100%',
+                        alignItems: 'center'
+                    }}>{backoffice ? 'Administration' : station ? station.name || station.id : ''}</Typography> :
+                    <Select
+                        variant="standard"
+                        color="secondary"
+                        value={station ? station.id : null}
+                        onChange={e => {
+                            handleSelectStation(Number(e.target.value))
+                        }}
+                    >
+                        {stations.map(s => <MenuItem key={s.id} value={s.id}><Typography
+                            variant={'h6'}>{s.name}</Typography></MenuItem>)}
+                    </Select>}
                 <Typography>{username}</Typography>
                 <IconButton size="medium" color="inherit" aria-label="logout" onClick={onLogout}>
                     <ExitToAppIcon/>
