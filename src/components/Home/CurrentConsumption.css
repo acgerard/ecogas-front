@@ -1,0 +1,13 @@
+.current-consumption-container {
+    display: grid;
+    padding: 16px;
+    row-gap: 16px;
+    column-gap: 16px;
+    grid-template-columns: auto 1fr;
+}
+
+.current-consumption-title {
+    justify-self: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}

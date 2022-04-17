@@ -1,0 +1,25 @@
+.home-container {
+    display: grid;
+    row-gap: 16px;
+    column-gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 600px) {
+    .home-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .remaining-ecogas {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+
+.remaining-ecogas {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 16px;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+}
