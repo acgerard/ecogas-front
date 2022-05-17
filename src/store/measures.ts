@@ -31,7 +31,7 @@ export const fetchMonthlyMeasures = createAsyncThunk(
 export const fetchYearlyMeasures = createAsyncThunk(
     'measures/yearly',
     async (stationId: number) => {
-        const oldDate = DateTime.now().minus({year: 2})
+        const oldDate = DateTime.now().minus({year: 1})
         const response = await getMeasures(stationId, oldDate.toSeconds(), MeasureGranularity.YEAR)
         return response.data
     }
@@ -39,19 +39,19 @@ export const fetchYearlyMeasures = createAsyncThunk(
 
 export const todayMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m1.date - m2.date
+    sortComparer: (m1, m2) => m2.date - m1.date
 })
 export const dailyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m1.date - m2.date
+    sortComparer: (m1, m2) => m2.date - m1.date
 })
 export const monthlyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m1.date - m2.date
+    sortComparer: (m1, m2) => m2.date - m1.date
 })
 export const yearlyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m1.date - m2.date
+    sortComparer: (m1, m2) => m2.date - m1.date
 })
 
 const todayMeasuresInitialState = todayMeasuresAdapter.getInitialState({
@@ -72,14 +72,14 @@ export const todayMeasuresSlice = createSlice({
     initialState: todayMeasuresInitialState,
     reducers: {},
     extraReducers: builder => {
-        builder.addCase(fetchTodayMeasures.pending, (state, action) => {
+        builder.addCase(fetchTodayMeasures.pending, (state) => {
             state.status = REDUX_STATUS.FETCHING
         })
         builder.addCase(fetchTodayMeasures.fulfilled, (state, action) => {
             todayMeasuresAdapter.setAll(state, action.payload)
             state.status = REDUX_STATUS.OK
         })
-        builder.addCase(fetchTodayMeasures.rejected, (state, action) => {
+        builder.addCase(fetchTodayMeasures.rejected, (state) => {
             state.status = REDUX_STATUS.ERROR
         })
     }
@@ -89,14 +89,14 @@ export const dailyMeasuresSlice = createSlice({
     initialState: dailyMeasuresInitialState,
     reducers: {},
     extraReducers: builder => {
-        builder.addCase(fetchDailyMeasures.pending, (state, action) => {
+        builder.addCase(fetchDailyMeasures.pending, (state) => {
             state.status = REDUX_STATUS.FETCHING
         })
         builder.addCase(fetchDailyMeasures.fulfilled, (state, action) => {
             dailyMeasuresAdapter.setAll(state, action.payload)
             state.status = REDUX_STATUS.OK
         })
-        builder.addCase(fetchDailyMeasures.rejected, (state, action) => {
+        builder.addCase(fetchDailyMeasures.rejected, (state) => {
             state.status = REDUX_STATUS.ERROR
         })
     }
@@ -106,14 +106,14 @@ export const monthlyMeasuresSlice = createSlice({
     initialState: monthlyMeasuresInitialState,
     reducers: {},
     extraReducers: builder => {
-        builder.addCase(fetchMonthlyMeasures.pending, (state, action) => {
+        builder.addCase(fetchMonthlyMeasures.pending, (state) => {
             state.status = REDUX_STATUS.FETCHING
         })
         builder.addCase(fetchMonthlyMeasures.fulfilled, (state, action) => {
             monthlyMeasuresAdapter.setAll(state, action.payload)
             state.status = REDUX_STATUS.OK
         })
-        builder.addCase(fetchMonthlyMeasures.rejected, (state, action) => {
+        builder.addCase(fetchMonthlyMeasures.rejected, (state) => {
             state.status = REDUX_STATUS.ERROR
         })
     }
@@ -124,14 +124,14 @@ export const yearlyMeasuresSlice = createSlice({
     initialState: yearlyMeasuresInitialState,
     reducers: {},
     extraReducers: builder => {
-        builder.addCase(fetchYearlyMeasures.pending, (state, action) => {
+        builder.addCase(fetchYearlyMeasures.pending, (state) => {
             state.status = REDUX_STATUS.FETCHING
         })
         builder.addCase(fetchYearlyMeasures.fulfilled, (state, action) => {
             yearlyMeasuresAdapter.setAll(state, action.payload)
             state.status = REDUX_STATUS.OK
         })
-        builder.addCase(fetchYearlyMeasures.rejected, (state, action) => {
+        builder.addCase(fetchYearlyMeasures.rejected, (state) => {
             state.status = REDUX_STATUS.ERROR
         })
     }
@@ -185,7 +185,7 @@ export const getThisYearEcogas = createSelector([getYearlyMeasures], measures =>
     return measures[0].v_ecogas - measures[1].v_ecogas
 })
 
-export const getEcogasRemaining = createSelector([getTodayMeasures], measures => {
+export const getEcogasRemaining = createSelector([getYearlyMeasures], measures => {
     if (measures.length > 0) {
         return measures[measures.length - 1].v_tank
     } else return null

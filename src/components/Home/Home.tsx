@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {
-    fetchTodayMeasures,
+    fetchTodayMeasures, fetchYearlyMeasures,
     getEcogasRemaining,
     getThisYearDiesel,
     getThisYearEcogas,
@@ -31,6 +31,7 @@ export function Home() {
     useEffect(() => {
         if (!!selectedStationId) {
             dispatch(fetchTodayMeasures(selectedStationId))
+            dispatch(fetchYearlyMeasures(selectedStationId))
         }
     }, [dispatch, selectedStationId])
 
