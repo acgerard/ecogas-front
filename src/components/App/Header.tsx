@@ -103,8 +103,8 @@ export function Header() {
                     }}>{backoffice ? 'Administration' : station ? station.name || station.id : ''}</Typography> :
                     <Select
                         variant="standard"
-                        color="secondary"
-                        value={station ? station.id : null}
+                        color={'secondary'}
+                        value={station ? station.id : ''}
                         onChange={e => {
                             handleSelectStation(Number(e.target.value))
                         }}
