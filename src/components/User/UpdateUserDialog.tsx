@@ -3,31 +3,11 @@ import React, {useEffect, useState} from "react";
 import {UserProfile} from "../../api/users";
 import {createUserStation, deleteUserStation, getUserById, updateUser} from "../../store/user";
 import {ConfirmDialog} from "../common/ConfirmDialog/ConfirmDialog";
-import {
-    Box,
-    Checkbox,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    OutlinedInput,
-    SelectChangeEvent,
-    TextField
-} from "@mui/material";
+import {Box, InputLabel, MenuItem, TextField} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import {useSelector} from "react-redux";
-import {getStations} from "../../store/station";
+import {StationPicker} from "./StationPicker";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 export function UpdateUserDialog({userId, onClose}: { userId: number, onClose?: () => void }) {
     const dispatch = useAppDispatch()
@@ -37,13 +17,13 @@ export function UpdateUserDialog({userId, onClose}: { userId: number, onClose?: 
     const [password, setPassword] = useState('')
     const [profile, setProfile] = useState<string>(user?.profile || '')
     const [stationsSelected, setStationsSelected] = useState<number[]>(user?.stations || [])
-    const stations = useSelector(getStations)
 
     useEffect(() => {
         setEmail(user?.email || '')
         setName(user?.name || '')
         setPassword('')
         setProfile(user?.profile || '')
+        setStationsSelected(user?.stations || [])
     }, [user])
 
 
@@ -64,17 +44,6 @@ export function UpdateUserDialog({userId, onClose}: { userId: number, onClose?: 
             }
         })
     }
-
-    const handleChange = (event: SelectChangeEvent<typeof stationsSelected>) => {
-        const {
-            target: {value},
-        } = event;
-        setStationsSelected(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',').map(v => Number(v)) : value,
-        );
-    };
-
 
     return <ConfirmDialog
         title={'Modifier user'}
@@ -104,26 +73,7 @@ export function UpdateUserDialog({userId, onClose}: { userId: number, onClose?: 
             </FormControl>
             <TextField label="Password" required={true} value={password} onChange={e => setPassword(e.target.value)}
                        type={'password'}/>
-            <FormControl>
-                <InputLabel id={"create-user-station"}>Stations</InputLabel>
-                <Select
-                    labelId="create-user-station"
-                    id="create-user-station-checkbox"
-                    multiple
-                    value={stationsSelected}
-                    onChange={handleChange}
-                    input={<OutlinedInput label="Stations"/>}
-                    renderValue={(selected) => selected.join(', ')}
-                    MenuProps={MenuProps}
-                >
-                    {stations.map((station) => (
-                        <MenuItem key={station.id} value={station.id}>
-                            <Checkbox checked={stationsSelected.indexOf(station.id) > -1}/>
-                            <ListItemText primary={station.name}/>
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+            <StationPicker stations={stationsSelected} onChange={setStationsSelected}/>
 
         </Box>
     </ConfirmDialog>
