@@ -15,7 +15,7 @@ export enum UserProfile {
 }
 
 export type UserWithStations = {
-    stations: string[]
+    stations: number[]
 } & User
 
 export async function getUsers(): Promise<AxiosResponse<UserWithStations[]>> {
@@ -24,4 +24,16 @@ export async function getUsers(): Promise<AxiosResponse<UserWithStations[]>> {
 
 export async function createUser(email: string, name: string, password: string, profile: string): Promise<AxiosResponse<User>> {
     return await http.post(`/users`, {email, name, password, profile})
+}
+
+export async function updateUser(id: number, email: string, name: string, password: string, profile: string): Promise<AxiosResponse<User>> {
+    return await http.put(`/users/${id}`, {email, name, password, profile})
+}
+
+export async function createUserStation(stationId: number, userId: number) {
+    return await http.post(`/users/${userId}/stations/${stationId}`)
+}
+
+export async function deleteUserStation(stationId: number, userId: number) {
+    return await http.delete(`/users/${userId}/stations/${stationId}`)
 }
