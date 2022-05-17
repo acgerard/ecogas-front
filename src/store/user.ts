@@ -49,10 +49,9 @@ export const createUserStation = createAsyncThunk(
     async ({
                stationId,
                userId
-           }: { stationId: number, userId: number }, {getState}: any): Promise<{ id: number, changes: { stations: number[] } }> => {
-        await createUserStationApi(stationId, userId)
-        const stations = getUserById(getState(), userId)?.stations || []
-        return {id: userId, changes: {stations: [...stations, stationId]}}
+           }: { stationId: number, userId: number }): Promise<unknown> => {
+        const response = await createUserStationApi(stationId, userId)
+        return response.data
     }
 );
 
@@ -61,12 +60,9 @@ export const deleteUserStation = createAsyncThunk(
     async ({
                stationId,
                userId
-           }: { stationId: number, userId: number }, {getState}: any): Promise<{ id: number, changes: { stations: number[] } }> => {
-        await deleteUserStationApi(stationId, userId)
-        const stations = getUserById(getState(), userId)?.stations || []
-        const index = stations.indexOf(stationId)
-        const newStations = [...stations].splice(index, 1)
-        return {id: userId, changes: {stations: newStations}}
+           }: { stationId: number, userId: number }): Promise<unknown> => {
+        const response = await deleteUserStationApi(stationId, userId)
+        return response.data
     }
 );
 
@@ -98,10 +94,23 @@ export const usersSlice = createSlice({
             usersAdapter.updateOne(state, {id: action.payload.id, changes: {...action.payload}})
         })
         builder.addCase(createUserStation.fulfilled, (state, action) => {
-            usersAdapter.updateOne(state, action.payload)
+            const userId = action.meta.arg.userId;
+            const stationId = action.meta.arg.stationId
+            const stations = state.entities[userId]?.stations || []
+            usersAdapter.updateOne(state, {
+                id: userId,
+                changes: {stations: [...stations, stationId]}
+            })
         })
         builder.addCase(deleteUserStation.fulfilled, (state, action) => {
-            usersAdapter.updateOne(state, action.payload)
+            const userId = action.meta.arg.userId;
+            const stationId = action.meta.arg.stationId
+            const stations: number[] = state.entities[userId]?.stations || []
+            const newStations = stations.filter(s => s !== stationId)
+            usersAdapter.updateOne(state, {
+                id: userId,
+                changes: {stations: newStations}
+            })
         })
     }
 })
