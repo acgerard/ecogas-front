@@ -39,19 +39,19 @@ export const fetchYearlyMeasures = createAsyncThunk(
 
 export const todayMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m2.date - m1.date
+    sortComparer: (m1, m2) => m2.date.localeCompare(m1.date)
 })
 export const dailyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m2.date - m1.date
+    sortComparer: (m1, m2) => m2.date.localeCompare(m1.date)
 })
 export const monthlyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m2.date - m1.date
+    sortComparer: (m1, m2) => m2.date.localeCompare(m1.date)
 })
 export const yearlyMeasuresAdapter = createEntityAdapter<Measure>({
     selectId: data => data?.date,
-    sortComparer: (m1, m2) => m2.date - m1.date
+    sortComparer: (m1, m2) => m2.date.localeCompare(m1.date)
 })
 
 const todayMeasuresInitialState = todayMeasuresAdapter.getInitialState({

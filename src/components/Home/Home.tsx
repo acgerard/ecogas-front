@@ -56,8 +56,8 @@ export function Home() {
             </Alert>
         </Snackbar>
         <div className={'home-container'}>
-            <CurrentConsumption title={'Diesel'} today={todayDiesel} year={yearDiesel}/>
-            <CurrentConsumption title={'Ecogas'} today={todayEcogas} year={yearEcogas}/>
+            <CurrentConsumption title={'Diesel'} today={todayDiesel} year={yearDiesel} nbDigit={2}/>
+            <CurrentConsumption title={'Ecogas'} today={todayEcogas} year={yearEcogas} nbDigit={3}/>
             <div className={'remaining-ecogas'}>
                 <Typography variant={'h4'} color={'primary'}>Ecogas restant</Typography>
                 <Typography fontWeight={'bold'}>{remainingEcogas || '?'}</Typography>

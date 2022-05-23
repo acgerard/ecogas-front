@@ -11,7 +11,7 @@ export enum MeasureGranularity {
 }
 
 export type Measure = {
-    date: number,
+    date: string,
 } & MeasureData
 
 export type MeasureData = {
