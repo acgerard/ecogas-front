@@ -38,6 +38,13 @@ export function Home() {
     useInterval(fetchData, 5000)
 
     useEffect(() => {
+        if (!!selectedStationId) {
+            dispatch(fetchTodayMeasures(selectedStationId))
+            dispatch(fetchYearlyMeasures(selectedStationId))
+        }
+    }, [dispatch, selectedStationId])
+
+    useEffect(() => {
         if (todayStatus === REDUX_STATUS.ERROR) {
             setOpen(true)
         }
