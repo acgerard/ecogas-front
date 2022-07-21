@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {
     fetchTodayMeasures, fetchYearlyMeasures,
@@ -14,6 +14,7 @@ import {Alert, Box, Snackbar, Typography} from "@mui/material";
 import {REDUX_STATUS} from "../../helpers/constants";
 import {getSelectedStationId} from "../../store/station";
 import {CurrentConsumption} from "./CurrentConsumption";
+import {useInterval} from "../../hooks/useInterval";
 
 import './Home.css'
 
@@ -27,13 +28,14 @@ export function Home() {
     const yearDiesel = useSelector(getThisYearDiesel)
     const yearEcogas = useSelector(getThisYearEcogas)
     const remainingEcogas = useSelector(getEcogasRemaining)
-
-    useEffect(() => {
+    const fetchData = useCallback(() => {
         if (!!selectedStationId) {
             dispatch(fetchTodayMeasures(selectedStationId))
             dispatch(fetchYearlyMeasures(selectedStationId))
         }
     }, [dispatch, selectedStationId])
+
+    useInterval(fetchData, 5000)
 
     useEffect(() => {
         if (todayStatus === REDUX_STATUS.ERROR) {
