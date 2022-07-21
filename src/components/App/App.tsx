@@ -1,7 +1,6 @@
-import {useSelector} from "react-redux";
-import {getToken, logout} from "../../store/authentication";
+import {logout} from "../../store/authentication";
 import React, {useEffect, useState} from "react";
-import {addErrorInterceptor, addSignInInterceptor, removeInterceptor} from "../../api/signIn";
+import {addErrorInterceptor} from "../../api/signIn";
 import {useAppDispatch} from "../../app/hooks";
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import {SignIn} from "../SignIn/SignIn";
@@ -15,7 +14,6 @@ import {UserList} from "../User/UserList";
 export function App() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const token = useSelector(getToken)
     // ready when error interceptor is added
     const [ready, setReady] = useState(false)
 
@@ -26,14 +24,6 @@ export function App() {
         })
         setReady(true)
     }, [dispatch, navigate])
-
-    useEffect(() => {
-        let id = 0
-        if (!!token) {
-            id = addSignInInterceptor(token)
-        }
-        return () => removeInterceptor(id)
-    }, [dispatch, token])
 
 
     return ready ? <Routes>

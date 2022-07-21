@@ -1,14 +1,18 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {signIn} from "../api/signIn";
+import {addSignInInterceptor, removeInterceptor, signIn} from "../api/signIn";
 import {RootState} from "../app/store";
 import {UserProfile} from "../api/users";
 
-
+let signInInterceptor = -1
 export const signInAction = createAsyncThunk(
     'authentication/signIn',
     async ({email, password}: { email: string, password: string }) => {
+        if(signInInterceptor >= 0) {
+            removeInterceptor(signInInterceptor)
+        }
         const response = await signIn(email, password)
         const token = window.btoa(`${email}:${password}`)
+        signInInterceptor = addSignInInterceptor(token)
         return {...response.data, token};
     }
 );

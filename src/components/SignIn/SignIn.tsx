@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../app/hooks";
 import {signInAction} from "../../store/authentication";
@@ -12,12 +12,13 @@ export function SignIn() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
-    const handleSignIn = () => {
+    const handleSignIn = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         dispatch(signInAction({email, password})).then(() => navigate('/home'))
         // TODO display something if error
     }
 
-    return <div className={'sign-in'}>
+    return <form className={'sign-in'} onSubmit={handleSignIn}>
         <Paper className={'sign-in-content'}>
             <Box sx={{
                 display: 'grid',
@@ -52,9 +53,9 @@ export function SignIn() {
                 autoComplete="current-password"
                 onChange={e => setPassword(e.target.value)}
             />
-            <Button fullWidth variant="contained" color="primary" onClick={handleSignIn}>
+            <Button fullWidth variant="contained" color="primary" type="submit">
                 Se connecter
             </Button>
         </Paper>
-    </div>
+    </form>
 }
