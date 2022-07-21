@@ -11,10 +11,10 @@ import {createTheme, ThemeProvider} from "@mui/material";
 
 // const blue_1 = '#00386a'
 // const blue_2 = '#0081b8'
-const blue_3 = '#009ee0'
+export const blue_3 = '#009ee0'
 // const blue_4 = '#83d0f0'
 // const green_1 = '#005b28'
-const green_2 = '#7ab51d'
+export const green_2 = '#7ab51d'
 // const green_3 = '#b1ca35'
 // const green_4 = '#dde069'
 // const blue_base = blue_3

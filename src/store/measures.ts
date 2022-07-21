@@ -23,7 +23,7 @@ export const fetchDailyMeasures = createAsyncThunk(
 export const fetchMonthlyMeasures = createAsyncThunk(
     'measures/monthly',
     async (stationId: number) => {
-        const beginningMonth = DateTime.now().startOf('month')
+        const beginningMonth = DateTime.now().startOf('year')
         const response = await getMeasures(stationId, beginningMonth.toSeconds(), MeasureGranularity.MONTH)
         return response.data
     }
